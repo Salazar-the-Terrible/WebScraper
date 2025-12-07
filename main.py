@@ -17,7 +17,7 @@ if st.button("Scrape Site"):
     body_content = extract_body_content(result)
     cleaned_content = clean_body_content(body_content)
 
-    print(result)
+    #print(result)
 
     st.session_state.dom_content = cleaned_content
 

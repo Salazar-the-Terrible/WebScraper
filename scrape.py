@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
+links = set()
 def scrape_website(website):
     print("Launching chrome browser...")
 
@@ -17,7 +17,7 @@ def scrape_website(website):
 
     try:
         driver.get(website)
-        #print("Page loaded...")
+        print("Page loaded...")
         #html = driver.page_source
         #time.sleep(10)
 
@@ -35,7 +35,7 @@ def scrape_website(website):
 
         html = driver.execute_script("return document.documentElement.outerHTML")
 
-
+        get_product_links(html, driver)
         return html
     finally:
         driver.quit()
@@ -62,3 +62,14 @@ def split_dom_content(dom_content, max_length = 6000):
     return [
         dom_content[i : i + max_length] for i in range(0, len(dom_content), max_length)
         ]
+
+def get_product_links(html, driver):
+    
+
+    anchor_tags = driver.find_elements(By.TAG_NAME, 'a')
+
+    for a in anchor_tags:
+        href = a.get_attribute("href")
+        if href and "/product/" in href:
+            links.add(href)
+            print(href)
